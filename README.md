@@ -51,20 +51,26 @@ This system provides an automated follow-up mechanism that:
 
 ---
 
-## Data Model (Simplified)
+## Data Model
 
-Core entities include:
+A simplified relational schema is included in:
 
-- `call_events`
-- `sms_messages`
-- `contacts`
-- `workflow_status`
+`/schema/01_core_tables.sql`
 
-PostgreSQL is used to:
+### Core Design Principles
 
-- Maintain event history
-- Ensure idempotent processing
-- Support reporting and future analytics
+- Separate contact identity from event logging
+- Treat calls and SMS messages as event records
+- Maintain referential integrity through foreign keys
+- Preserve Twilio SIDs for idempotency and reconciliation
+- Keep transport-layer identifiers separate from business logic
+
+This structure enables:
+
+- Event auditing
+- Reporting and analytics expansion
+- Replay-safe webhook handling
+- Future workflow state tracking
 
 ---
 
