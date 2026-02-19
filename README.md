@@ -100,6 +100,28 @@ It can be adapted for:
 - Multi-client automation models
 - Expansion into AI-driven response routing
 
+## Webhook Handling & Idempotency
+
+Twilio may retry webhook delivery if a response is delayed or fails.
+
+To prevent duplicate processing:
+
+- `twilio_call_sid` is stored as a UNIQUE field
+- Incoming events are checked before insertion
+- Duplicate SIDs are safely ignored
+- Database constraints enforce single processing per event
+
+### Processing Strategy
+
+1. Receive webhook payload
+2. Extract `CallSid`
+3. Attempt insert into `call_events`
+4. If UNIQUE constraint violation occurs:
+   - Log duplicate attempt
+   - Exit workflow safely
+
+This ensures replay-safe event handling.
+
 ---
 
 ## Future Enhancements
